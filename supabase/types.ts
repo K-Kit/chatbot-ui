@@ -568,6 +568,7 @@ export interface Database {
           created_at: string
           file_id: string
           id: string
+          level: number | null
           local_embedding: string | null
           openai_embedding: string | null
           sharing: string
@@ -580,6 +581,7 @@ export interface Database {
           created_at?: string
           file_id: string
           id?: string
+          level?: number | null
           local_embedding?: string | null
           openai_embedding?: string | null
           sharing?: string
@@ -592,6 +594,7 @@ export interface Database {
           created_at?: string
           file_id?: string
           id?: string
+          level?: number | null
           local_embedding?: string | null
           openai_embedding?: string | null
           sharing?: string
@@ -722,6 +725,36 @@ export interface Database {
           }
         ]
       }
+      files_raptor: {
+        Row: {
+          child_chunk_id: string
+          parent_chunk_id: string
+        }
+        Insert: {
+          child_chunk_id: string
+          parent_chunk_id: string
+        }
+        Update: {
+          child_chunk_id?: string
+          parent_chunk_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "files_raptor_child_chunk_id_fkey"
+            columns: ["child_chunk_id"]
+            isOneToOne: false
+            referencedRelation: "file_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "files_raptor_parent_chunk_id_fkey"
+            columns: ["parent_chunk_id"]
+            isOneToOne: false
+            referencedRelation: "file_items"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       folders: {
         Row: {
           created_at: string
@@ -818,6 +851,7 @@ export interface Database {
       }
       messages: {
         Row: {
+          assistant_id: string | null
           chat_id: string
           content: string
           created_at: string
@@ -830,6 +864,7 @@ export interface Database {
           user_id: string
         }
         Insert: {
+          assistant_id?: string | null
           chat_id: string
           content: string
           created_at?: string
@@ -842,6 +877,7 @@ export interface Database {
           user_id: string
         }
         Update: {
+          assistant_id?: string | null
           chat_id?: string
           content?: string
           created_at?: string
@@ -854,6 +890,13 @@ export interface Database {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "messages_assistant_id_fkey"
+            columns: ["assistant_id"]
+            isOneToOne: false
+            referencedRelation: "assistants"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "messages_chat_id_fkey"
             columns: ["chat_id"]
@@ -920,6 +963,7 @@ export interface Database {
         Row: {
           api_key: string
           base_url: string
+          context_length: number
           created_at: string
           description: string
           folder_id: string | null
@@ -933,6 +977,7 @@ export interface Database {
         Insert: {
           api_key: string
           base_url: string
+          context_length?: number
           created_at?: string
           description: string
           folder_id?: string | null
@@ -946,6 +991,7 @@ export interface Database {
         Update: {
           api_key?: string
           base_url?: string
+          context_length?: number
           created_at?: string
           description?: string
           folder_id?: string | null
@@ -1101,6 +1147,7 @@ export interface Database {
           created_at: string
           display_name: string
           google_gemini_api_key: string | null
+          groq_api_key: string | null
           has_onboarded: boolean
           id: string
           image_path: string
@@ -1128,6 +1175,7 @@ export interface Database {
           created_at?: string
           display_name: string
           google_gemini_api_key?: string | null
+          groq_api_key?: string | null
           has_onboarded?: boolean
           id?: string
           image_path: string
@@ -1155,6 +1203,7 @@ export interface Database {
           created_at?: string
           display_name?: string
           google_gemini_api_key?: string | null
+          groq_api_key?: string | null
           has_onboarded?: boolean
           id?: string
           image_path?: string
@@ -1328,7 +1377,6 @@ export interface Database {
           folder_id: string | null
           id: string
           name: string
-          request_in_body: boolean
           schema: Json
           sharing: string
           updated_at: string | null
@@ -1342,7 +1390,6 @@ export interface Database {
           folder_id?: string | null
           id?: string
           name: string
-          request_in_body?: boolean
           schema?: Json
           sharing?: string
           updated_at?: string | null
@@ -1356,7 +1403,6 @@ export interface Database {
           folder_id?: string | null
           id?: string
           name?: string
-          request_in_body?: boolean
           schema?: Json
           sharing?: string
           updated_at?: string | null
