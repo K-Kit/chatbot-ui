@@ -87,16 +87,15 @@ async function generateAndStoreEmbeddings() {
 
 
 
-        if (embeddingsProvider === "openai") {
-            const response = await openai.embeddings.create({
-                model: "text-embedding-3-small",
-                input: chunks.map(chunk => chunk.content)
-            })
+        const response = await openai.embeddings.create({
+            model: "text-embedding-3-small",
+            input: chunks.map(chunk => chunk.content)
+        })
 
-            embeddings = response.data.map((item: any) => {
-                return item.embedding
-            })
-        }
+        embeddings = response.data.map((item: any) => {
+            return item.embedding
+        })
+
         const file_items = chunks.map((chunk, index) => ({
             file_id: file.id,
             user_id: "77908180-3057-4c8b-9dee-559465a903d1",
